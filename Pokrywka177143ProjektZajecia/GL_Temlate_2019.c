@@ -54,7 +54,7 @@ unsigned int		texture[5];			// obiekt tekstury
 
 static int licznik;
 
-double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0;
+double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f;;
 int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom;
 										// Declaration for Window procedure
 LRESULT CALLBACK WndProc(HWND    hWnd,
@@ -753,7 +753,7 @@ void robot(double d1, double d2, double d3, double d4)
 
 void nowy_robot(double d1, double d2, double d3, double d4, double d5, double obrot, double flaga)
 {
-	if (flaga <= 245) {
+	
 		glTranslated(d5, 0, -d4);
 		glPushMatrix();
 		glRotated(-90, 1, 0, 0);
@@ -786,40 +786,8 @@ void nowy_robot(double d1, double d2, double d3, double d4, double d5, double ob
 		glRotated(30+d3 * (-1), 0, 1, 0);
 		graniastoslup(10, 10, 25);
 		glPopMatrix();
-	}
-	else {
-		glTranslated(d5, 0, -d4);
-		glPushMatrix();
-		glRotated(-90, 1, 0, 0);
-		glTranslated(0, 0, -50);
-		walec(30, 5);
-		glRotated(90, 0, 1, 0);
-		glTranslated(-15, -15, -15);
-		walec(10, 30);
-		glTranslated(0, 0, 8);
-		glRotated(90, 1, 0, 0);
-		glRotated(-45, 0, 1, 0);
-		glRotated(-80 + d1, 0, 1, 0);
-		glTranslated(-5, 2.5, 0);
-		graniastoslup(10, 10, 40);
-		glTranslated(2.5, 20, 40);
-		glRotated(90, 1, 0, 0);
-		walec(10, 30);
-		glRotated(-90, 0, 1, 0);
-		glRotated(45, 1, 0, 0);
-		glTranslated(10, -2.5, 2.5);
-		glRotated(-90 + d2 * (-1), 1, 0, 0);
-		graniastoslup(10, 10, 60);
-		glTranslated(-10, 5, 60);
-		glRotated(90, 0, 1, 0);
-		walec(10, 30);
-		glRotated(90, 1, 0, 0);
-		glRotated(-45, 0, 1, 0);
-		glTranslated(-5, 10, 5);
-		glRotated(30+d3 * (-1), 0, 1, 0);
-		graniastoslup(10, 10, 25);
-		glPopMatrix();
-	}
+	
+		
 	
 	
 	
@@ -834,7 +802,7 @@ void tasma(double d1) {
 	glTranslated(10, 40, 0);
 	glColor3d(0, 0, 1);
 	graniastoslup(40, 2, 300);
-	glTranslated(20, 7+movekulaZ, 280-d1);
+	glTranslated(20+movekulaY, 7+movekulaZ, 280-d1+movekulaX);
 	kula();
 	glPopMatrix();
 }
@@ -1310,6 +1278,9 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (wParam == '6' && rot3 <= 45)
 			rot3 += 5.0f;
 
+		if (wParam == 'Q' )
+			rot8 += 5.0f;
+
 		InvalidateRect(hWnd, NULL, FALSE);
 	}
 	break;
@@ -1320,7 +1291,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		{
 			licznik++;
 			if (move1 <= 245) {
-				move1 += 5.0;
+				move1 += 50.0;
 			}
 
 			//if (licznik < 15)
@@ -1331,9 +1302,9 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 			//{
 			//	licznik = 0;
 			//}
-			//rot5 += 15.0;
+			rot5 += 15.0;
 			
-			if(move1 >=245) {
+			if (move1 >= 245) {
 				if (rot1 >= -9.0 && stop1 == 0)
 					rot1 -= 2.0;
 				if (rot1 >= -9.0 && stop1 == 0)
@@ -1358,15 +1329,75 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 					if (rot3 <= 15.0) {
 						rot3 += 4.0;
 					}
-					if (movekulaZ >= 40 && rot1 >= 10.0 && rot2 >= 3 && rot3 >= 20.0) {
+					if (movekulaZ >= 10 && rot1 >= 10.0 && rot2 >= 3 && rot3 >= 15.0 && stop3 == 0) {
+						stop1 += 1;
+						stop3 += 1;
+					}
+				}
+			}
+				if (stop1 == 2) {
+					if (rot8 <= 170.0) {
+						rot8 += 5.3;
+					}
+					
+					if (anglekula <= GL_PI-0.01)
+					{
+					
+						
+						movekulaX += 7.7 * cos(anglekula);
+						movekulaY += 7.7 * sin(anglekula);
+						anglekula += (GL_PI / 33.0f);
+
+						
+					}
+					if (rot8 >= 170.0 && anglekula >= GL_PI - 0.01 && stop1 == 2) {
 						stop1 += 1;
 					}
 				}
+				if (stop1 == 3) {
+					if (rot1 >= -4) {
+						rot1 -= 3.0;
+					}
+					if (movekulaY <= 174.0) {
+						movekulaY += 2.3;
+					}
+					if (rot2 <= 20.0) {
+						rot2 += 3.0;
+					}
+					if (rot3 <= 30) {
+						rot3 += 3.0;
+					}
+					if (rot1 <= -4 && movekulaY >= 174.0 && rot2 >= 20 && rot3 >= 30 && stop1 == 3) {
+						stop1 += 1;
+					}
+				}
+				if (stop1 == 4) {
+					if (movekulaZ >= -12.0) {
+						movekulaZ -= 3.0;
+					}
+					if (movekulaZ <= -12.0 && stop1 == 4) {
+						stop1 += 1;
+					}
+				}
+				if (stop1 == 5) {
+					if (rot8 >= 0.0) {
+						rot8 -= 5.0;
+					}
+					if (rot1 <= 5.0) {
+						rot1 += 3.0;
+					}
+					if (rot2 >= 30.0) {
+						rot2 -= 3.0;
+					}
+					if (rot3 >= 20) {
+						rot3 -= 3.0;
+					}
+					if (rot8 <= 0.0 && stop1 == 5) {
+						stop1 += 1;
+					}
 				}
 				
-				if (stop1 == 2) {
-					rot8 += 5.0;
-				}
+				
 				
 					
 				
