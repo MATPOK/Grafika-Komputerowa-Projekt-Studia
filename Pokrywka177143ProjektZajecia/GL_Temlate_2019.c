@@ -42,11 +42,13 @@ static HINSTANCE hInstance;
 // Rotation amounts
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
-static GLfloat xPol = 0.0f;
-static GLfloat yPol = 0.0f;
+static GLfloat xObs = 0.0f;
+static GLfloat yObs = 0.0f;
 
 static GLsizei lastHeight;
 static GLsizei lastWidth;
+static GLsizei lastX;
+static GLsizei lastY;
 
 // Opis tekstury
 BITMAPINFOHEADER	bitmapInfoHeader;	// nag³ówek obrazu
@@ -55,8 +57,11 @@ unsigned int		texture[5];			// obiekt tekstury
 
 static int licznik;
 
-double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f;;
+double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16;
 int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom;
+
+
+
 										// Declaration for Window procedure
 LRESULT CALLBACK WndProc(HWND    hWnd,
 	UINT    message,
@@ -121,9 +126,9 @@ void calcNormal(float v[3][3], float out[3])
 
 
 // Change viewing volume and viewport.  Called when window is resized
-void ChangeSize(GLsizei w, GLsizei h)
+void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
 {
-	GLfloat nRange = 800.0f;
+	GLfloat nRange = 1000;
 	GLfloat fAspect;
 	// Prevent a divide by zero
 	if (h == 0)
@@ -132,10 +137,12 @@ void ChangeSize(GLsizei w, GLsizei h)
 
 	lastWidth = w;
 	lastHeight = h;
+	lastX = x;
+	lastY = y;
 
 	fAspect = (GLfloat)w / (GLfloat)h;
 	// Set Viewport to window dimensions
-	glViewport(50, 50, w+1200, h+500);
+	glViewport(x, y, w+1200, h+500);
 
 	// Reset coordinate system
 	glMatrixMode(GL_PROJECTION);
@@ -732,6 +739,7 @@ void graniastoslup(double a, double b, double h) {
 
 void podloga(double a, double b, double h) {
 	glPushMatrix();
+	glTranslated(200, 1200, 0);
 	// Dolna podstawa
 	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
 	glBindTexture(GL_TEXTURE_2D, texture[3]);
@@ -943,6 +951,48 @@ void nowy_robot(double d1, double d2, double d3, double d4, double d5, double ob
 	
 }
 
+void nowy_drugi_robot(double d1, double d2, double d3, double d4, double d5, double obrot)
+{
+
+	glTranslated(d5, 0, -d4);
+	glPushMatrix();
+	glRotated(-90, 1, 0, 0);
+	glRotated(obrot, 0, 0, 1);
+	glTranslated(0, 0, -50);
+	walec(30, 5);
+	glRotated(90, 0, 1, 0);
+	glTranslated(-15, -15, -15);
+	walec(10, 30);
+	glTranslated(0, 0, 8);
+	glRotated(90, 1, 0, 0);
+	glRotated(-45, 0, 1, 0);
+	glRotated(-80 + d1, 0, 1, 0);
+	glTranslated(-5, 2.5, 0);
+	graniastoslup(10, 10, 40);
+	glTranslated(2.5, 20, 40);
+	glRotated(90, 1, 0, 0);
+	walec(10, 30);
+	glRotated(-90, 0, 1, 0);
+	glRotated(45, 1, 0, 0);
+	glTranslated(10, -2.5, 2.5);
+	glRotated(-90 + d2 * (-1), 1, 0, 0);
+	graniastoslup(10, 10, 60);
+	glTranslated(-10, 5, 60);
+	glRotated(90, 0, 1, 0);
+	walec(10, 30);
+	glRotated(90, 1, 0, 0);
+	glRotated(-45, 0, 1, 0);
+	glTranslated(-5, 10, 5);
+	glRotated(30 + d3 * (-1), 0, 1, 0);
+	graniastoslup(10, 10, 25);
+	glPopMatrix();
+
+
+
+
+
+}
+
 void tasma(double d1) {
 	glColor3d(0, 0, 1);
 	glPushMatrix();
@@ -981,10 +1031,12 @@ void scena(double d1) {
 	glTranslated(-600, -48, -1400);
 	glRotated(90, 1, 0, 0);
 	glColor3d(1, 0, 0);
-	podloga(5000, 5000, 2);
+	podloga(500, 500, 2);
 	glRotated(-90, 1, 0, 0);
 	glTranslated(600, 26, 1500);
 	skrzynka();
+	glTranslated(-7, 25, 80);
+	nowy_drugi_robot(rot11=20, rot12, rot13, rot14, rot15, rot16);
 	
 }
 
@@ -1001,7 +1053,8 @@ void RenderScene(void)
 	glPushMatrix();
 	glRotatef(xRot, 1.0f, 0.0f, 0.0f);
 	glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-
+	glTranslatef(xObs, 0, 0);
+	glTranslatef(0, 0, yObs);
 	/////////////////////////////////////////////////////////////////
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
@@ -1335,7 +1388,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 	case WM_SIZE:
 		// Call our function which modifies the clipping
 		// volume and viewport
-		ChangeSize(LOWORD(lParam), HIWORD(lParam));
+		ChangeSize(LOWORD(lParam), HIWORD(lParam), xObs, yObs);
 		break;
 
 
@@ -1411,18 +1464,14 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 
 		if (wParam == VK_RIGHT)
 			yRot += 5.0f;
-
-		if (wParam == 'W')
-			xPol += 5.0f;
-
-		if (wParam == 'S')
-			xPol -= 5.0f;
-
 		if (wParam == 'A')
-			yPol -= 5.0f;
-
+			xObs -= 5.0f;
 		if (wParam == 'D')
-			yPol += 5.0f;
+			xObs += 5.0f;
+		if (wParam == 'W')
+			yObs -= 5.0f;
+		if (wParam == 'S')
+			yObs += 5.0f;
 
 		xRot = (const int)xRot % 360;
 		yRot = (const int)yRot % 360;
@@ -1451,6 +1500,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		InvalidateRect(hWnd, NULL, FALSE);
 	}
 	break;
+
 	
 	//Obs³uga timera
 	case WM_TIMER:
@@ -1558,6 +1608,9 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 					}
 					if (rot3 >= 20) {
 						rot3 -= 3.0;
+					}
+					if (rot11 >= -100) {
+						rot11 -= 3.0;
 					}
 					if (rot8 <= 0.0 && stop1 == 5) {
 						stop1 += 1;
