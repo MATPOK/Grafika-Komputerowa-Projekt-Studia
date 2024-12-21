@@ -1508,7 +1508,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		{
 			licznik++;
 			if (move1 <= 245) {
-				move1 += 50.0;
+				move1 += 5.0;
 			}
 
 			//if (licznik < 15)
