@@ -1609,7 +1609,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 					if (rot3 >= 20) {
 						rot3 -= 3.0;
 					}
-					if (rot11 >= -100) { //nie dziala
+					if (rot11 >= -100) { //nie dziala nie chce sie zginac ramie
 						rot11 -= 3.0;
 					}
 					if (rot8 <= 0.0 && stop1 == 5) {
