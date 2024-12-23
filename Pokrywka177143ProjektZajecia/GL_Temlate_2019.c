@@ -42,13 +42,11 @@ static HINSTANCE hInstance;
 // Rotation amounts
 static GLfloat xRot = 0.0f;
 static GLfloat yRot = 0.0f;
-static GLfloat xObs = 0.0f;
-static GLfloat yObs = 0.0f;
+
 
 static GLsizei lastHeight;
 static GLsizei lastWidth;
-static GLsizei lastX;
-static GLsizei lastY;
+
 
 // Opis tekstury
 BITMAPINFOHEADER	bitmapInfoHeader;	// nag³ówek obrazu
@@ -126,7 +124,7 @@ void calcNormal(float v[3][3], float out[3])
 
 
 // Change viewing volume and viewport.  Called when window is resized
-void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
+void ChangeSize(GLsizei w, GLsizei h)
 {
 	GLfloat nRange = 450;
 	GLfloat fAspect;
@@ -141,7 +139,7 @@ void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
 
 	fAspect = (GLfloat)w / (GLfloat)h;
 	// Set Viewport to window dimensions
-	glViewport(x, y, w, h);
+	glViewport(0, 0, w, h);
 
 	// Reset coordinate system
 	glMatrixMode(GL_PROJECTION);
@@ -1130,8 +1128,7 @@ void RenderScene(void)
 	glPushMatrix();
 	glRotatef(xRot, 1.0f, 0.0f, 0.0f);
 	glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-	glTranslatef(xObs, 0, 0);
-	glTranslatef(0, 0, yObs);
+	
 	/////////////////////////////////////////////////////////////////
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
@@ -1481,7 +1478,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 	case WM_SIZE:
 		// Call our function which modifies the clipping
 		// volume and viewport
-		ChangeSize(LOWORD(lParam), HIWORD(lParam), xObs, yObs);
+		ChangeSize(LOWORD(lParam), HIWORD(lParam));
 		break;
 
 
