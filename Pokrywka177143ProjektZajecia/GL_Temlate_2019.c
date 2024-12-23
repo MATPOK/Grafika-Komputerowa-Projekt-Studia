@@ -57,7 +57,7 @@ unsigned int		texture[5];			// obiekt tekstury
 
 static int licznik;
 
-double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea;
+double rot0, rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea;
 int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom, stop = 0;
 
 
@@ -128,7 +128,7 @@ void calcNormal(float v[3][3], float out[3])
 // Change viewing volume and viewport.  Called when window is resized
 void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
 {
-	GLfloat nRange = 1000;
+	GLfloat nRange = 450;
 	GLfloat fAspect;
 	// Prevent a divide by zero
 	if (h == 0)
@@ -137,12 +137,11 @@ void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
 
 	lastWidth = w;
 	lastHeight = h;
-	lastX = x;
-	lastY = y;
+	
 
 	fAspect = (GLfloat)w / (GLfloat)h;
 	// Set Viewport to window dimensions
-	glViewport(x, y, w+1200, h+500);
+	glViewport(x, y, w, h);
 
 	// Reset coordinate system
 	glMatrixMode(GL_PROJECTION);
@@ -155,9 +154,9 @@ void ChangeSize(GLsizei w, GLsizei h, GLsizei x, GLsizei y)
 		glOrtho(-nRange*w / h, nRange*w / h, -nRange, nRange, -nRange, nRange);
 
 	// Establish perspective: 
-	/*
-	gluPerspective(60.0f,fAspect,1.0,400);
-	*/
+	
+	//gluPerspective(60.0f,fAspect,1.0,400);
+	
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -966,7 +965,8 @@ void robot(double d1, double d2, double d3, double d4)
 	glPushMatrix();
 		glColor3d(0.5, 0.5, 1.0);
 		glRotated(-90, 1, 0, 0);
-		glRotated(d4, 0, 0, 1);
+		glRotated(-100, 0, 0, 1);
+		//glRotated(d4, 0, 0, 1);
 		glTranslated(0, 0, -50);
 		walec(30, 5);
 		glTranslated(0, 0, 5);
@@ -1095,7 +1095,7 @@ void dwa_roboty()
 void dwa_nowe_roboty(double flaga)
 {
 	glTranslated(-200, 0, 0);
-	robot(rot1, rot2, rot3, rot5);
+	robot(rot1, rot2, rot3, rot0);
 	glTranslated(200, 0, 0);
 	glTranslated(120, 0, 0);
 	nowy_robot(rot1, rot2, rot3, rot6, rot7, rot8, flaga);
@@ -1612,6 +1612,8 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (wParam == 101)
 		{
 			licznik++;
+			
+
 			if (move1 <= 245) {
 				move1 += 5.0;
 			}
@@ -1759,7 +1761,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				
 					
 				
-			licznikpom++;
+		
 			
 			InvalidateRect(hWnd, NULL, FALSE);
 		}
