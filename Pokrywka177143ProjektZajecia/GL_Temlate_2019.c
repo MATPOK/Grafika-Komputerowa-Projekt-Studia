@@ -57,8 +57,8 @@ unsigned int		texture[5];			// obiekt tekstury
 
 static int licznik;
 
-double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16;
-int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom;
+double rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea;
+int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom, stop = 0;
 
 
 
@@ -951,10 +951,10 @@ void nowy_robot(double d1, double d2, double d3, double d4, double d5, double ob
 	
 }
 
-void nowy_drugi_robot(double d1, double d2, double d3, double d4, double d5, double obrot)
+void nowy_drugi_robot(double d1, double d2, double d3, double movea, double movew, double obrot)
 {
 
-	glTranslated(d5, 0, -d4);
+	glTranslated(movew, 0, -movea);
 	glPushMatrix();
 	glRotated(-90, 1, 0, 0);
 	glRotated(obrot, 0, 0, 1);
@@ -965,7 +965,7 @@ void nowy_drugi_robot(double d1, double d2, double d3, double d4, double d5, dou
 	walec(10, 30);
 	glTranslated(0, 0, 8);
 	glRotated(90, 1, 0, 0);
-	glRotated(-45, 0, 1, 0);
+	glRotated(-20, 0, 1, 0);
 	glRotated(-80 + d1, 0, 1, 0);
 	glTranslated(-5, 2.5, 0);
 	graniastoslup(10, 10, 40);
@@ -984,7 +984,7 @@ void nowy_drugi_robot(double d1, double d2, double d3, double d4, double d5, dou
 	glRotated(-45, 0, 1, 0);
 	glTranslated(-5, 10, 5);
 	glRotated(30 + d3 * (-1), 0, 1, 0);
-	graniastoslup(10, 10, 25);
+	graniastoslup(10, 10, 20);
 	glPopMatrix();
 
 
@@ -1031,12 +1031,12 @@ void scena(double d1) {
 	glTranslated(-600, -48, -1400);
 	glRotated(90, 1, 0, 0);
 	glColor3d(1, 0, 0);
-	podloga(500, 500, 2);
+	podloga(500, 500, 40);
 	glRotated(-90, 1, 0, 0);
 	glTranslated(600, 26, 1500);
 	skrzynka();
 	glTranslated(-7, 25, 80);
-	nowy_drugi_robot(rot11=20, rot12, rot13, rot14, rot15, rot16);
+	nowy_drugi_robot(rot11, rot12, rot13, movea, movew, rot16);
 	
 }
 
@@ -1453,6 +1453,45 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		// Key press, check for arrow keys to do cube rotation.
 	case WM_KEYDOWN:
 	{
+		if (stop1 == 8 && stop == 0) {
+			if (wParam == 'A') {
+				if (movew == 70 && movea > 0)
+				{
+					movea -= 5.0f;
+					movekulaY += 5.0f;
+				}
+				
+			}
+				
+			if (wParam == 'D')
+			{
+				if (movew == 70 && movea < 345) {
+					movea += 5.0f;
+					movekulaY -= 5.0f;
+				}
+				
+			}
+				
+			if (wParam == 'W')
+			{
+				if (movea == 0 && movew>0) {
+					movew -= 5.0f;
+					movekulaX += 5.0f;
+				}
+			}
+				
+			if (wParam == 'S')
+			{
+				if (movea == 0 && movew<70) {
+					movew += 5.0f;
+					movekulaX -= 5.0f;
+				}
+			}
+			if (stop==0 && movew == 70 && movea == 345 && wParam == VK_SPACE) {
+				stop += 1;
+			}
+				
+			}
 		if (wParam == VK_UP)
 			xRot -= 5.0f;
 
@@ -1464,38 +1503,11 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 
 		if (wParam == VK_RIGHT)
 			yRot += 5.0f;
-		if (wParam == 'A')
-			xObs -= 5.0f;
-		if (wParam == 'D')
-			xObs += 5.0f;
-		if (wParam == 'W')
-			yObs -= 5.0f;
-		if (wParam == 'S')
-			yObs += 5.0f;
+		
 
 		xRot = (const int)xRot % 360;
 		yRot = (const int)yRot % 360;
 
-		if (wParam == '1' && rot1 >= 0)
-			rot1 -= 5.0f;
-
-		if (wParam == '2' && rot1 <= 45)
-			rot1 += 5.0f;
-
-		if (wParam == '3' && rot2 >= 0)
-			rot2 -= 5.0f;
-
-		if (wParam == '4' && rot2 <= 70)
-			rot2 += 5.0f;
-
-		if (wParam == '5' && rot3 >= 0)
-			rot3 -= 5.0f;
-
-		if (wParam == '6' && rot3 <= 45)
-			rot3 += 5.0f;
-
-		if (wParam == 'Q' )
-			rot8 += 5.0f;
 
 		InvalidateRect(hWnd, NULL, FALSE);
 	}
@@ -1508,17 +1520,8 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		{
 			licznik++;
 			if (move1 <= 245) {
-				move1 += 5.0;
+				move1 += 50.0;
 			}
-
-			//if (licznik < 15)
-			//	//rot5 += 15.0;
-			//if (licznik > 15 && licznik < 30)
-			//	//rot5 -= 15.0;
-			//if (licznik > 30)
-			//{
-			//	licznik = 0;
-			//}
 			rot5 += 15.0;
 			
 			if (move1 >= 245) {
@@ -1598,24 +1601,66 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				}
 				if (stop1 == 5) {
 					if (rot8 >= 0.0) {
-						rot8 -= 5.0;
+						rot8 -= 10.0;
 					}
 					if (rot1 <= 5.0) {
-						rot1 += 3.0;
+						rot1 += 4.0;
 					}
 					if (rot2 >= 30.0) {
-						rot2 -= 3.0;
+						rot2 -= 4.0;
 					}
 					if (rot3 >= 20) {
-						rot3 -= 3.0;
+						rot3 -= 4.0;
 					}
-					if (rot11 >= -100) { //nie dziala nie chce sie zginac ramie
-						rot11 -= 3.0;
+					if (rot11 >= -25) { 
+						rot11 -= 1.5;
 					}
-					if (rot8 <= 0.0 && stop1 == 5) {
+					if (rot8 <= 0.0 && rot1 >= 5.0 && rot2 <= 30.0 && rot3 <= 20 && rot11 <= -25 && stop1 == 5) {
 						stop1 += 1;
 					}
 				}
+				if (stop1 == 6)
+				{
+					if (movekulaY <= 188)
+					{
+						movekulaY += 5.0;
+					}
+					if (movekulaZ <= 18)
+					{
+						movekulaZ += 3.0;
+					}
+					if (rot13 >= -24) {
+						rot13 -= 4.0;
+					}
+					if (movekulaY >= 165 && movekulaZ >= 18 && stop1 == 6)
+					{
+						movekulaX -= 2.0;
+						stop1 += 1;
+					}
+				}
+				if (stop1 == 7)
+				{
+					if (movekulaZ <= 49)
+					{
+						movekulaZ += 3.1;
+					}
+					if (rot13 <= 8) {
+						rot13 += 3.7;
+					}
+					if (rot11 <= -7) {
+						rot11 += 1.85;
+					}
+					if (movekulaZ >= 49 && rot13 >= 8 && rot11 >= -7 && stop1 == 7)
+					{
+						stop1 += 1;
+					}
+					
+				}
+				if (stop == 1) {
+					movekulaZ -= 5.0;
+				}
+					
+				
 				
 				
 				
