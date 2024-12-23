@@ -335,7 +335,7 @@ void kula(void)
 	gluQuadricTexture(obj, GL_TRUE);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glColor3d(1.0, 0.8, 0.8);
+	glColor3d(1.0, 0,0);
 	glEnable(GL_TEXTURE_2D);
 	gluSphere(obj, 7, 15, 7);
 	glDisable(GL_TEXTURE_2D);
@@ -566,7 +566,7 @@ void ramie(double r1, double r2, double h, double d) {
 void walec(double r, double h)
 {
 	double angle, x, y;
-	glColor3d(0.5, 1, 0);
+	//glColor3d(0.5, 1, 0);
 	glBegin(GL_TRIANGLE_FAN);
 	glNormal3d(0.0, 0.0, -1.0);
 	glVertex3d(0.0f, 0.0f, 0.0f);
@@ -737,8 +737,70 @@ void graniastoslup(double a, double b, double h) {
 
 }
 
+void tasmociag(double a, double b, double h) {
+	// Dolna podstawa
+	glColor3d(0.25, 0.25, 0.25);
+	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glBindTexture(GL_TEXTURE_2D, texture[4]);
+	glBegin(GL_QUADS);
+	glNormal3d(0, 0, -1);
+	glTexCoord2d(0.0, 1.0); glVertex3d(a, 0, 0);
+	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, 0);
+	glTexCoord2d(1.0, 0.0); glVertex3d(0, b, 0);
+	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, 0);
+	glEnd();
+
+	// Przednia œciana
+	glBegin(GL_QUADS);
+	glNormal3d(0, -1, 0);
+	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, 0);
+	glTexCoord2d(1.0, 0.0); glVertex3d(a, 0, 0);
+	glTexCoord2d(1.0, 1.0); glVertex3d(a, 0, h);
+	glTexCoord2d(0.0, 1.0); glVertex3d(0, 0, h);
+	glEnd();
+
+	// Lewa œciana
+	glBegin(GL_QUADS);
+	glNormal3d(-1, 0, 0);
+	glTexCoord2d(0.0, 0.0); glVertex3d(0, b, 0);
+	glTexCoord2d(1.0, 0.0); glVertex3d(0, 0, 0);
+	glTexCoord2d(1.0, 1.0); glVertex3d(0, 0, h);
+	glTexCoord2d(0.0, 1.0); glVertex3d(0, b, h);
+	glEnd();
+
+	// Tylna œciana
+	glBegin(GL_QUADS);
+	glNormal3d(0, 1, 0);
+	glTexCoord2d(0.0, 0.0); glVertex3d(a, b, 0);
+	glTexCoord2d(1.0, 0.0); glVertex3d(0, b, 0);
+	glTexCoord2d(1.0, 1.0); glVertex3d(0, b, h);
+	glTexCoord2d(0.0, 1.0); glVertex3d(a, b, h);
+	glEnd();
+
+	// Prawa œciana
+	glBegin(GL_QUADS);
+	glNormal3d(1, 0, 0);
+	glTexCoord2d(0.0, 0.0); glVertex3d(a, 0, 0);
+	glTexCoord2d(1.0, 0.0); glVertex3d(a, b, 0);
+	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, h);
+	glTexCoord2d(0.0, 1.0); glVertex3d(a, 0, h);
+	glEnd();
+
+	// Górna podstawa
+	glBegin(GL_QUADS);
+	glNormal3d(0, 0, 1);
+	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, h);
+	glTexCoord2d(1.0, 0.0); glVertex3d(a, 0, h);
+	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, h);
+	glTexCoord2d(0.0, 1.0); glVertex3d(0, b, h);
+	glEnd();
+	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+}
+
+
 void podloga(double a, double b, double h) {
 	glPushMatrix();
+	glColor3d(0.25, 0.25, 0.25);
 	glTranslated(200, 1200, 0);
 	// Dolna podstawa
 	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
@@ -749,7 +811,6 @@ void podloga(double a, double b, double h) {
 	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, 0);
 	glTexCoord2d(1.0, 0.0); glVertex3d(0, b, 0);
 	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, 0);
-	glEnd();
 	glEnd();
 	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
 
@@ -797,6 +858,19 @@ void podloga(double a, double b, double h) {
 	 glVertex3d(a, b, h);
 	 glVertex3d(0, b, h);
 	 glEnd();
+
+	 glColor3d(0, 1, 0);
+	 //szyna dla robota
+	 glTranslated(390, 370, 0);
+	 glRotated(90, 0, 1, 0);
+	 //graniastoslup(90, 10, 100);
+	 walec(5, 80);
+	 glRotated(-90, 0, 1, 0);
+	 glTranslated(80, 5, 0);
+	 glRotated(90, 1, 0, 0);
+	// graniastoslup(10, 355, 100);
+	 walec(5, 355);
+	 
 	 glPopMatrix();
 	
 }
@@ -890,6 +964,7 @@ void stozek(double r, double h) {
 void robot(double d1, double d2, double d3, double d4)
 {
 	glPushMatrix();
+		glColor3d(0.5, 0.5, 1.0);
 		glRotated(-90, 1, 0, 0);
 		glRotated(d4, 0, 0, 1);
 		glTranslated(0, 0, -50);
@@ -911,9 +986,11 @@ void robot(double d1, double d2, double d3, double d4)
 
 void nowy_robot(double d1, double d2, double d3, double d4, double d5, double obrot, double flaga)
 {
-	
+		
+		
 		glTranslated(d5, 0, -d4);
 		glPushMatrix();
+		glColor3d(0, 0, 1);
 		glRotated(-90, 1, 0, 0);
 		glRotated(obrot, 0, 0, 1);
 		glTranslated(0, 0, -50);
@@ -956,6 +1033,7 @@ void nowy_drugi_robot(double d1, double d2, double d3, double movea, double move
 
 	glTranslated(movew, 0, -movea);
 	glPushMatrix();
+	glColor3d(0, 1, 0);
 	glRotated(-90, 1, 0, 0);
 	glRotated(obrot, 0, 0, 1);
 	glTranslated(0, 0, -50);
@@ -994,14 +1072,14 @@ void nowy_drugi_robot(double d1, double d2, double d3, double movea, double move
 }
 
 void tasma(double d1) {
-	glColor3d(0, 0, 1);
 	glPushMatrix();
+	glColor3d(0.6, 0.3, 0.1);
 	glTranslated(0, -40, 40);
 	glRotated(-90, 0, 1, 0);
 	graniastoslup(60, 40, 300);
 	glTranslated(10, 40, 0);
 	glColor3d(0, 1, 0);
-	graniastoslup(40, 2, 300);
+	tasmociag(40, 1, 300);
 	glTranslated(20+movekulaY, 7+movekulaZ, 280-d1+movekulaX);
 	kula();
 	glPopMatrix();
@@ -1030,7 +1108,6 @@ void scena(double d1) {
 	dwa_nowe_roboty(d1);
 	glTranslated(-600, -48, -1400);
 	glRotated(90, 1, 0, 0);
-	glColor3d(1, 0, 0);
 	podloga(500, 500, 40);
 	glRotated(-90, 1, 0, 0);
 	glTranslated(600, 26, 1500);
@@ -1347,6 +1424,19 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
 			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
 
+		// ³aduje piaty obraz tekstury:
+		bitmapData = LoadBitmapFile("Bitmapy\\ROCK.bmp", &bitmapInfoHeader);
+		glBindTexture(GL_TEXTURE_2D, texture[4]);       // aktywuje obiekt tekstury
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		// tworzy obraz tekstury
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
+			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
+
 		// ³aduje czwarty (trawa) obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\PODLOGA.bmp", &bitmapInfoHeader);
 		glBindTexture(GL_TEXTURE_2D, texture[3]);       // aktywuje obiekt tekstury
@@ -1359,6 +1449,9 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		// tworzy obraz tekstury
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
 			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
+		
+
+		
 		if (bitmapData)
 			free(bitmapData);
 
@@ -1657,7 +1750,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 					
 				}
 				if (stop == 1) {
-					movekulaZ -= 5.0;
+					movekulaZ -= 15.0;
 				}
 					
 				
