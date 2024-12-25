@@ -55,8 +55,16 @@ unsigned int		texture[5];			// obiekt tekstury
 
 static int licznik;
 
-double rot0, rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea;
+double rot0, rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea, observerX, observerY;
 int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom, stop = 0;
+
+float angleX = 0.0f;  // K¹t obrotu w osi X
+float angleY = 0.0f;  // K¹t obrotu w osi Y
+
+int lastX = 0, lastY = 0;  // Poprzednia pozycja myszy
+
+
+
 
 
 
@@ -126,39 +134,31 @@ void calcNormal(float v[3][3], float out[3])
 // Change viewing volume and viewport.  Called when window is resized
 void ChangeSize(GLsizei w, GLsizei h)
 {
-	GLfloat nRange = 450;
-	GLfloat fAspect;
-	// Prevent a divide by zero
-	if (h == 0)
-		h = 1;
+    GLfloat nRange = 1000;
+    GLfloat fAspect;
+    // Prevent a divide by zero
+    if (h == 0)
+        h = 1;
 
+    lastWidth = w;
+    lastHeight = h;
 
-	lastWidth = w;
-	lastHeight = h;
-	
+    fAspect = (GLfloat)w / (GLfloat)h;
+    // Set Viewport to window dimensions
+    glViewport(0, 0, w, h);
 
-	fAspect = (GLfloat)w / (GLfloat)h;
-	// Set Viewport to window dimensions
-	glViewport(0, 0, w, h);
+    // Reset coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-	// Reset coordinate system
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+    // Establish perspective using gluPerspective
+    gluPerspective(60.0f, fAspect, 1.0f, 1000.0f);  // Field of view, aspect ratio, near and far planes
 
-	// Establish clipping volume (left, right, bottom, top, near, far)
-	if (w <= h)
-		glOrtho(-nRange, nRange, -nRange*h / w, nRange*h / w, -nRange, nRange);
-	else
-		glOrtho(-nRange*w / h, nRange*w / h, -nRange, nRange, -nRange, nRange);
-
-	// Establish perspective: 
-	
-	//gluPerspective(60.0f,fAspect,1.0,400);
-	
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    // Reset modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
+
 
 
 
@@ -1126,9 +1126,9 @@ void RenderScene(void)
 
 	// Save the matrix state and do the rotations
 	glPushMatrix();
-	glRotatef(xRot, 1.0f, 0.0f, 0.0f);
-	glRotatef(yRot, 0.0f, 1.0f, 0.0f);
-	
+	glRotatef(angleX, 1.0f, 0.0f, 0.0f);
+	glRotatef(angleY, 0.0f, 1.0f, 0.0f);
+	glTranslatef(observerX, -30.0f, observerY);
 	/////////////////////////////////////////////////////////////////
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
@@ -1544,7 +1544,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 	case WM_KEYDOWN:
 	{
 		if (stop1 == 8 && stop == 0) {
-			if (wParam == 'A') {
+			if (wParam == VK_LEFT) {
 				if (movew == 70 && movea > 0)
 				{
 					movea -= 5.0f;
@@ -1553,7 +1553,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				
 			}
 				
-			if (wParam == 'D')
+			if (wParam == VK_RIGHT)
 			{
 				if (movew == 70 && movea < 345) {
 					movea += 5.0f;
@@ -1562,7 +1562,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				
 			}
 				
-			if (wParam == 'W')
+			if (wParam == VK_UP)
 			{
 				if (movea == 0 && movew>0) {
 					movew -= 5.0f;
@@ -1570,7 +1570,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				}
 			}
 				
-			if (wParam == 'S')
+			if (wParam == VK_DOWN)
 			{
 				if (movea == 0 && movew<70) {
 					movew += 5.0f;
@@ -1582,17 +1582,32 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 			}
 				
 			}
-		if (wParam == VK_UP)
-			xRot -= 5.0f;
+		if (wParam == 'W')
+		{
+			observerY += 5.0f * cos(angleY * 3.14159f / 180.0f) * cos(angleX * 3.14159f / 180.0f);   
+			observerX -= 5.0f * sin(angleY * 3.14159f / 180.0f) * cos(angleX * 3.14159f / 180.0f);  
+		}
+			
+			
 
-		if (wParam == VK_DOWN)
-			xRot += 5.0f;
+		if (wParam == 'A')
+		{
+			observerX += 5.0f * cos(angleY * 3.14159f / 180.0f); // W przeciwnym kierunku X
+			observerY += 5.0f * sin(angleY * 3.14159f / 180.0f); // W przeciwnym kierunku X
+		}
 
-		if (wParam == VK_LEFT)
-			yRot -= 5.0f;
+		if (wParam == 'D')
+		{
+			observerX -= 5.0f * cos(angleY * 3.14159f / 180.0f); // W przeciwnym kierunku X
+			observerY -= 5.0f * sin(angleY * 3.14159f / 180.0f); // W przeciwnym kierunku X
+			
+		}
 
-		if (wParam == VK_RIGHT)
-			yRot += 5.0f;
+		if (wParam == 'S')
+		{
+			observerY -= 5.0f * cos(angleY * 3.14159f / 180.0f) * cos(angleX * 3.14159f / 180.0f);
+			observerX += 5.0f * sin(angleY * 3.14159f / 180.0f) * cos(angleX * 3.14159f / 180.0f);
+		}
 		
 
 		xRot = (const int)xRot % 360;
@@ -1763,6 +1778,29 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 			InvalidateRect(hWnd, NULL, FALSE);
 		}
 		break;
+
+		case WM_MOUSEMOVE:
+		{
+			// Odczytanie wspó³rzêdnych myszy
+			int x = LOWORD(lParam);  // Wspó³rzêdna X
+			int y = HIWORD(lParam);  // Wspó³rzêdna Y
+
+			// Oblicz ró¿nicê w pozycjach myszy
+			int dx = x - lastX;
+			int dy = y - lastY;
+
+			// Zaktualizuj k¹ty obrotu na podstawie ró¿nicy pozycji
+			angleX += dy * 0.1f;  // Obrót w osi X
+			angleY += dx * 0.1f;  // Obrót w osi Y
+
+			// Zapisz ostatni¹ pozycjê myszy
+			lastX = x;
+			lastY = y;
+
+			
+		}
+		break;
+		
 
 	default:   // Passes it on if unproccessed
 		return (DefWindowProc(hWnd, message, wParam, lParam));
