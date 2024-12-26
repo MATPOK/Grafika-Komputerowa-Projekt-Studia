@@ -36,7 +36,7 @@
 HPALETTE hPalette = NULL;
 
 // Application name and instance storeage
-static LPCTSTR lpszAppName = "GL Template";
+static LPCTSTR lpszAppName = "Mateusz Pokrywka Grafika Projekt";
 static HINSTANCE hInstance;
 
 // Rotation amounts
