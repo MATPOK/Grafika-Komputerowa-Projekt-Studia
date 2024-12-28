@@ -68,6 +68,7 @@ int lastX = 0, lastY = 0;  // Poprzednia pozycja myszy
 
 
 
+
 										// Declaration for Window procedure
 LRESULT CALLBACK WndProc(HWND    hWnd,
 	UINT    message,
@@ -1113,7 +1114,9 @@ void scena(double d1) {
 	glTranslated(-7, 25, 80);
 	nowy_drugi_robot(rot11, rot12, rot13, movea, movew, rot16);
 	
+	
 }
+
 
 
 // Called to draw scene
@@ -1123,19 +1126,26 @@ void RenderScene(void)
 
 	// Clear the window with current clearing color
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	// Save the matrix state and do the rotations
 	glPushMatrix();
 	glRotatef(angleX, 1.0f, 0.0f, 0.0f);
 	glRotatef(angleY, 0.0f, 1.0f, 0.0f);
 	glTranslatef(observerX, -30.0f, observerY);
+
+	glEnable(GL_FOG);
+	glFogi(GL_FOG_MODE, GL_EXP); // Tryby: GL_EXP, GL_EXP2, GL_LINEAR
+	glFogf(GL_FOG_DENSITY, 0.009f);
+	glFogf(GL_FOG_START, 5.0f); // Start mg³y (dla GL_LINEAR)
+	glFogf(GL_FOG_END, 20.0f);  // Koniec mg³y (dla GL_LINEAR)
+	GLfloat fogColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	glFogfv(GL_FOG_COLOR, fogColor);
+
 	/////////////////////////////////////////////////////////////////
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
 
 	//Sposób na odróŸnienie "przedniej" i "tylniej" œciany wielok¹ta:
 	glPolygonMode(GL_BACK, GL_LINE);
-
 	//Uzyskanie siatki:
 	//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
 
@@ -1751,13 +1761,13 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 					{
 						movekulaZ += 3.1;
 					}
-					if (rot13 <= 8) {
+					if (rot13 <= 4) {
 						rot13 += 3.7;
 					}
 					if (rot11 <= -7) {
 						rot11 += 1.85;
 					}
-					if (movekulaZ >= 49 && rot13 >= 8 && rot11 >= -7 && stop1 == 7)
+					if (movekulaZ >= 49 && rot13 >= 4 && rot11 >= -7 && stop1 == 7)
 					{
 						stop1 += 1;
 					}
