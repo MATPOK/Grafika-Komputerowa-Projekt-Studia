@@ -1,8 +1,8 @@
-// Gl_template.c
-//Wy³šczanie b³êdów przed "fopen"
+ï»¿// Gl_template.c
+//WyÅ‚Å¡czanie bÅ‚Ä™dÃ³w przed "fopen"
 #define  _CRT_SECURE_NO_WARNINGS
 
-// £adowanie bibliotek:
+// Åadowanie bibliotek:
 #ifdef _MSC_VER                         // Check if MS Visual C compiler
 #  pragma comment(lib, "opengl32.lib")  // Compiler-specific directive to avoid manually configuration
 #  pragma comment(lib, "glu32.lib")     // Link libraries
@@ -49,7 +49,7 @@ static GLsizei lastWidth;
 
 
 // Opis tekstury
-BITMAPINFOHEADER	bitmapInfoHeader;	// nag³ówek obrazu
+BITMAPINFOHEADER	bitmapInfoHeader;	// nagÅ‚Ã³wek obrazu
 unsigned char*		bitmapData;			// dane tekstury
 unsigned int		texture[5];			// obiekt tekstury
 
@@ -58,8 +58,8 @@ static int licznik;
 double rot0, rot1, rot2, rot3, rot4, rot5, rot6, rot7, rot8, move1, movekulaX=0, movekulaY=0, movekulaZ=0, anglekula = 0.0f, rot11, rot12, rot13, rot14, rot15, rot16, movew, movea, observerX, observerY;
 int stop1=0, stop2=0, stop3=0, stop4=0, stop5 = 0, licznikpom, stop = 0;
 
-float angleX = 0.0f;  // K¹t obrotu w osi X
-float angleY = 0.0f;  // K¹t obrotu w osi Y
+float angleX = 0.0f;  // KÄ…t obrotu w osi X
+float angleY = 0.0f;  // KÄ…t obrotu w osi Y
 
 int lastX = 0, lastY = 0;  // Poprzednia pozycja myszy
 
@@ -213,7 +213,7 @@ void skrzynka(void)
 	glColor3d(0.8, 0.7, 0.3);
 
 
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	glBegin(GL_QUADS);
@@ -306,7 +306,7 @@ void skrzynka(void)
 	glTexCoord2d(1.0, 0.0); glVertex3d(-25, -25, 25);
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 	
 	
 }
@@ -343,23 +343,23 @@ void kula(void)
 
 
 // LoadBitmapFile
-// opis: ³aduje mapê bitow¹ z pliku i zwraca jej adres.
-//       Wype³nia strukturê nag³ówka.
-//	 Nie obs³uguje map 8-bitowych.
+// opis: Å‚aduje mapÄ™ bitowÄ… z pliku i zwraca jej adres.
+//       WypeÅ‚nia strukturÄ™ nagÅ‚Ã³wka.
+//	 Nie obsÅ‚uguje map 8-bitowych.
 unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader)
 {
-	FILE *filePtr;							// wskaŸnik pozycji pliku
-	BITMAPFILEHEADER	bitmapFileHeader;		// nag³ówek pliku
+	FILE *filePtr;							// wskaÅºnik pozycji pliku
+	BITMAPFILEHEADER	bitmapFileHeader;		// nagÅ‚Ã³wek pliku
 	unsigned char		*bitmapImage;			// dane obrazu
 	int					imageIdx = 0;		// licznik pikseli
-	unsigned char		tempRGB;				// zmienna zamiany sk³adowych
+	unsigned char		tempRGB;				// zmienna zamiany skÅ‚adowych
 
 												// otwiera plik w trybie "read binary"
 	filePtr = fopen(filename, "rb");
 	if (filePtr == NULL)
 		return NULL;
 
-	// wczytuje nag³ówek pliku
+	// wczytuje nagÅ‚Ã³wek pliku
 	fread(&bitmapFileHeader, sizeof(BITMAPFILEHEADER), 1, filePtr);
 
 	// sprawdza, czy jest to plik formatu BMP
@@ -369,16 +369,16 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 		return NULL;
 	}
 
-	// wczytuje nag³ówek obrazu
+	// wczytuje nagÅ‚Ã³wek obrazu
 	fread(bitmapInfoHeader, sizeof(BITMAPINFOHEADER), 1, filePtr);
 
-	// ustawia wskaŸnik pozycji pliku na pocz¹tku danych obrazu
+	// ustawia wskaÅºnik pozycji pliku na poczÄ…tku danych obrazu
 	fseek(filePtr, bitmapFileHeader.bfOffBits, SEEK_SET);
 
-	// przydziela pamiêæ buforowi obrazu
+	// przydziela pamiÄ™Ä‡ buforowi obrazu
 	bitmapImage = (unsigned char*)malloc(bitmapInfoHeader->biSizeImage);
 
-	// sprawdza, czy uda³o siê przydzieliæ pamiêæ
+	// sprawdza, czy udaÅ‚o siÄ™ przydzieliÄ‡ pamiÄ™Ä‡
 	if (!bitmapImage)
 	{
 		free(bitmapImage);
@@ -389,14 +389,14 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 	// wczytuje dane obrazu
 	fread(bitmapImage, 1, bitmapInfoHeader->biSizeImage, filePtr);
 
-	// sprawdza, czy dane zosta³y wczytane
+	// sprawdza, czy dane zostaÅ‚y wczytane
 	if (bitmapImage == NULL)
 	{
 		fclose(filePtr);
 		return NULL;
 	}
 
-	// zamienia miejscami sk³adowe R i B 
+	// zamienia miejscami skÅ‚adowe R i B 
 	for (imageIdx = 0; imageIdx < bitmapInfoHeader->biSizeImage; imageIdx += 3)
 	{
 		tempRGB = bitmapImage[imageIdx];
@@ -404,7 +404,7 @@ unsigned char *LoadBitmapFile(char *filename, BITMAPINFOHEADER *bitmapInfoHeader
 		bitmapImage[imageIdx + 2] = tempRGB;
 	}
 
-	// zamyka plik i zwraca wskaŸnik bufora zawieraj¹cego wczytany obraz
+	// zamyka plik i zwraca wskaÅºnik bufora zawierajÄ…cego wczytany obraz
 	fclose(filePtr);
 	return bitmapImage;
 }
@@ -485,7 +485,7 @@ void ramie(double r1, double r2, double h, double d) {
 	}
 	glEnd();
 	/*
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glBegin(GL_QUADS);
@@ -504,9 +504,9 @@ void ramie(double r1, double r2, double h, double d) {
 	glTexCoord2d(1.0, 0.0); glVertex3d(25, 25, -25);
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 	*/
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
 	glBegin(GL_QUADS);
 	glNormal3d(0.0, 0.0, 1.0);
@@ -515,7 +515,7 @@ void ramie(double r1, double r2, double h, double d) {
 	glTexCoord2d(1.0, 1.0); glVertex3d(d, r2, h);
 	glTexCoord2d(0.0, 1.0); glVertex3d(0, r1, h);
 	glEnd();
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 
 	glBegin(GL_QUADS); {
 		float v[3][3] = { {d, r2, h},
@@ -600,7 +600,7 @@ void walec(double r, double h)
 	glEnd();
 }
 
-//DOPISANE NA ZAJ TWORZENIE 2 ŒCIAN SZESCIAKATA
+//DOPISANE NA ZAJ TWORZENIE 2 ÅšCIAN SZESCIAKATA
 void szescian(void)
 {
 	glBegin(GL_QUADS);
@@ -688,7 +688,7 @@ void graniastoslup(double a, double b, double h) {
 	glVertex3d(a, b, 0);
 	glEnd();
 
-	// Przednia œciana
+	// Przednia Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, -1, 0);
 	glVertex3d(0, 0, 0);
@@ -697,7 +697,7 @@ void graniastoslup(double a, double b, double h) {
 	glVertex3d(0, 0, h);
 	glEnd();
 
-	// Lewa œciana
+	// Lewa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(-1, 0, 0);
 	glVertex3d(0, b, 0);
@@ -706,7 +706,7 @@ void graniastoslup(double a, double b, double h) {
 	glVertex3d(0, b, h);
 	glEnd();
 
-	// Tylna œciana
+	// Tylna Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, 1, 0);
 	glVertex3d(a, b, 0);
@@ -715,7 +715,7 @@ void graniastoslup(double a, double b, double h) {
 	glVertex3d(a, b, h);
 	glEnd();
 
-	// Prawa œciana
+	// Prawa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(1, 0, 0);
 	glVertex3d(a, 0, 0);
@@ -724,7 +724,7 @@ void graniastoslup(double a, double b, double h) {
 	glVertex3d(a, 0, h);
 	glEnd();
 
-	// Górna podstawa
+	// GÃ³rna podstawa
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, 1);
 	glVertex3d(0, 0, h);
@@ -738,7 +738,7 @@ void graniastoslup(double a, double b, double h) {
 void tasmociag(double a, double b, double h) {
 	// Dolna podstawa
 	glColor3d(0.25, 0.25, 0.25);
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 	glBindTexture(GL_TEXTURE_2D, texture[4]);
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, -1);
@@ -748,7 +748,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, 0);
 	glEnd();
 
-	// Przednia œciana
+	// Przednia Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, -1, 0);
 	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, 0);
@@ -757,7 +757,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(0.0, 1.0); glVertex3d(0, 0, h);
 	glEnd();
 
-	// Lewa œciana
+	// Lewa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(-1, 0, 0);
 	glTexCoord2d(0.0, 0.0); glVertex3d(0, b, 0);
@@ -766,7 +766,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(0.0, 1.0); glVertex3d(0, b, h);
 	glEnd();
 
-	// Tylna œciana
+	// Tylna Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, 1, 0);
 	glTexCoord2d(0.0, 0.0); glVertex3d(a, b, 0);
@@ -775,7 +775,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(0.0, 1.0); glVertex3d(a, b, h);
 	glEnd();
 
-	// Prawa œciana
+	// Prawa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(1, 0, 0);
 	glTexCoord2d(0.0, 0.0); glVertex3d(a, 0, 0);
@@ -784,7 +784,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(0.0, 1.0); glVertex3d(a, 0, h);
 	glEnd();
 
-	// Górna podstawa
+	// GÃ³rna podstawa
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, 1);
 	glTexCoord2d(0.0, 0.0); glVertex3d(0, 0, h);
@@ -792,7 +792,7 @@ void tasmociag(double a, double b, double h) {
 	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, h);
 	glTexCoord2d(0.0, 1.0); glVertex3d(0, b, h);
 	glEnd();
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 }
 
 
@@ -801,7 +801,7 @@ void podloga(double a, double b, double h) {
 	glColor3d(0.25, 0.25, 0.25);
 	glTranslated(200, 1200, 0);
 	// Dolna podstawa
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 	glBindTexture(GL_TEXTURE_2D, texture[3]);
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, -1);
@@ -810,9 +810,9 @@ void podloga(double a, double b, double h) {
 	glTexCoord2d(1.0, 0.0); glVertex3d(0, b, 0);
 	glTexCoord2d(1.0, 1.0); glVertex3d(a, b, 0);
 	glEnd();
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 
-	// Przednia œciana
+	// Przednia Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, -1, 0);
 	glVertex3d(0, 0, 0);
@@ -821,7 +821,7 @@ void podloga(double a, double b, double h) {
 	glVertex3d(0, 0, h);
 	glEnd();
 
-	// Lewa œciana
+	// Lewa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(-1, 0, 0);
 	glVertex3d(0, b, 0);
@@ -830,7 +830,7 @@ void podloga(double a, double b, double h) {
 	glVertex3d(0, b, h);
 	glEnd();
 
-	// Tylna œciana
+	// Tylna Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, 1, 0);
 	glVertex3d(a, b, 0);
@@ -839,7 +839,7 @@ void podloga(double a, double b, double h) {
 	glVertex3d(a, b, h);
 	glEnd();
 
-	// Prawa œciana
+	// Prawa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(1, 0, 0);
 	glVertex3d(a, 0, 0);
@@ -848,7 +848,7 @@ void podloga(double a, double b, double h) {
 	glVertex3d(a, 0, h);
 	glEnd();
 
-	// Górna podstawa
+	// GÃ³rna podstawa
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, 1);
 	 glVertex3d(0, 0, h);
@@ -883,7 +883,7 @@ void graniastoslup_napis(double a, double b, double h) {
 	glVertex3d(a, b, 0);
 	glEnd();
 
-	// Przednia œciana
+	// Przednia Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, -1, 0);
 	 glVertex3d(0, 0, 0);
@@ -894,7 +894,7 @@ void graniastoslup_napis(double a, double b, double h) {
 	
 	
 	
-	// Lewa œciana
+	// Lewa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(-1, 0, 0);
 	glVertex3d(0, b, 0);
@@ -903,7 +903,7 @@ void graniastoslup_napis(double a, double b, double h) {
 	glVertex3d(0, b, h);
 	glEnd();
 
-	// Tylna œciana
+	// Tylna Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(0, 1, 0);
 	glVertex3d(a, b, 0);
@@ -912,7 +912,7 @@ void graniastoslup_napis(double a, double b, double h) {
 	glVertex3d(a, b, h);
 	glEnd();
 
-	// Prawa œciana
+	// Prawa Å›ciana
 	glBegin(GL_QUADS);
 	glNormal3d(1, 0, 0);
 	 glVertex3d(a, 0, 0);
@@ -922,8 +922,8 @@ void graniastoslup_napis(double a, double b, double h) {
 	glEnd();
 	
 
-	// Górna podstawa
-	glEnable(GL_TEXTURE_2D); // W³¹cz teksturowanie
+	// GÃ³rna podstawa
+	glEnable(GL_TEXTURE_2D); // WÅ‚Ä…cz teksturowanie
 	glBindTexture(GL_TEXTURE_2D, texture[2]);
 	glBegin(GL_QUADS);
 	glNormal3d(0, 0, 1);
@@ -932,7 +932,7 @@ void graniastoslup_napis(double a, double b, double h) {
 	glTexCoord2d(1.0, 0.0); glVertex3d(a, b, h);
 	glTexCoord2d(1.0, 1.0); glVertex3d(0, b, h);
 	glEnd();
-	glDisable(GL_TEXTURE_2D); // Wy³¹cz teksturowanie
+	glDisable(GL_TEXTURE_2D); // WyÅ‚Ä…cz teksturowanie
 }
 
 void stozek(double r, double h) {
@@ -1135,8 +1135,8 @@ void RenderScene(void)
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP); // Tryby: GL_EXP, GL_EXP2, GL_LINEAR
 	glFogf(GL_FOG_DENSITY, 0.009f);
-	glFogf(GL_FOG_START, 5.0f); // Start mg³y (dla GL_LINEAR)
-	glFogf(GL_FOG_END, 20.0f);  // Koniec mg³y (dla GL_LINEAR)
+	glFogf(GL_FOG_START, 5.0f); // Start mgÅ‚y (dla GL_LINEAR)
+	glFogf(GL_FOG_END, 20.0f);  // Koniec mgÅ‚y (dla GL_LINEAR)
 	GLfloat fogColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	glFogfv(GL_FOG_COLOR, fogColor);
 
@@ -1144,7 +1144,7 @@ void RenderScene(void)
 	// MIEJSCE NA KOD OPENGL DO TWORZENIA WLASNYCH SCEN:		   //
 	/////////////////////////////////////////////////////////////////
 
-	//Sposób na odróŸnienie "przedniej" i "tylniej" œciany wielok¹ta:
+	//SposÃ³b na odrÃ³Åºnienie "przedniej" i "tylniej" Å›ciany wielokÄ…ta:
 	glPolygonMode(GL_BACK, GL_LINE);
 	//Uzyskanie siatki:
 	//glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
@@ -1385,9 +1385,9 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		hRC = wglCreateContext(hDC);
 		wglMakeCurrent(hDC, hRC);
 		SetupRC();
-		glGenTextures(3, &texture[0]);                  // tworzy obiekt tekstury			
+		glGenTextures(5, &texture[0]);                  // tworzy obiekt tekstury			
 
-														// ³aduje pierwszy obraz tekstury:
+														// Å‚aduje pierwszy obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\checker.bmp", &bitmapInfoHeader);
 
 		glBindTexture(GL_TEXTURE_2D, texture[0]);       // aktywuje obiekt tekstury
@@ -1405,7 +1405,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (bitmapData)
 			free(bitmapData);
 
-		// ³aduje drugi obraz tekstury:
+		// Å‚aduje drugi obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\crate.bmp", &bitmapInfoHeader);
 		glBindTexture(GL_TEXTURE_2D, texture[1]);       // aktywuje obiekt tekstury
 
@@ -1418,7 +1418,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
 			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
 
-		// ³aduje trzeci (puma) obraz tekstury:
+		// Å‚aduje trzeci (puma) obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\MATEUSZ.bmp", &bitmapInfoHeader);
 		glBindTexture(GL_TEXTURE_2D, texture[2]);       // aktywuje obiekt tekstury
 
@@ -1431,7 +1431,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
 			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
 
-		// ³aduje piaty obraz tekstury:
+		// Å‚aduje piaty obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\ROCK.bmp", &bitmapInfoHeader);
 		glBindTexture(GL_TEXTURE_2D, texture[4]);       // aktywuje obiekt tekstury
 
@@ -1444,7 +1444,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, bitmapInfoHeader.biWidth,
 			bitmapInfoHeader.biHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, bitmapData);
 
-		// ³aduje czwarty (trawa) obraz tekstury:
+		// Å‚aduje czwarty (trawa) obraz tekstury:
 		bitmapData = LoadBitmapFile("Bitmapy\\PODLOGA.bmp", &bitmapInfoHeader);
 		glBindTexture(GL_TEXTURE_2D, texture[3]);       // aktywuje obiekt tekstury
 
@@ -1462,7 +1462,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 		if (bitmapData)
 			free(bitmapData);
 
-		// ustalenie sposobu mieszania tekstury z t³em
+		// ustalenie sposobu mieszania tekstury z tÅ‚em
 		glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		break;
 
@@ -1629,7 +1629,7 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 	break;
 
 	
-	//Obs³uga timera
+	//ObsÅ‚uga timera
 	case WM_TIMER:
 		if (wParam == 101)
 		{
@@ -1776,34 +1776,25 @@ LRESULT CALLBACK WndProc(HWND    hWnd,
 				if (stop == 1) {
 					movekulaZ -= 15.0;
 				}
-					
-				
-				
-				
-				
-					
-				
-		
-			
 			InvalidateRect(hWnd, NULL, FALSE);
 		}
 		break;
 
 		case WM_MOUSEMOVE:
 		{
-			// Odczytanie wspó³rzêdnych myszy
-			int x = LOWORD(lParam);  // Wspó³rzêdna X
-			int y = HIWORD(lParam);  // Wspó³rzêdna Y
+			// Odczytanie wspÃ³Å‚rzÄ™dnych myszy
+			int x = LOWORD(lParam);  // WspÃ³Å‚rzÄ™dna X
+			int y = HIWORD(lParam);  // WspÃ³Å‚rzÄ™dna Y
 
-			// Oblicz ró¿nicê w pozycjach myszy
+			// Oblicz rÃ³Å¼nicÄ™ w pozycjach myszy
 			int dx = x - lastX;
 			int dy = y - lastY;
 
-			// Zaktualizuj k¹ty obrotu na podstawie ró¿nicy pozycji
-			angleX += dy * 0.1f;  // Obrót w osi X
-			angleY += dx * 0.1f;  // Obrót w osi Y
+			// Zaktualizuj kÄ…ty obrotu na podstawie rÃ³Å¼nicy pozycji
+			angleX += dy * 0.1f;  // ObrÃ³t w osi X
+			angleY += dx * 0.1f;  // ObrÃ³t w osi Y
 
-			// Zapisz ostatni¹ pozycjê myszy
+			// Zapisz ostatniÄ… pozycjÄ™ myszy
 			lastX = x;
 			lastY = y;
 
